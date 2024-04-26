@@ -154,6 +154,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Minimal number of screen colums to keep to the right of the cursor.
+vim.opt.sidescrolloff = 10
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -189,6 +192,9 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- My stange and custom keypindings
+vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
