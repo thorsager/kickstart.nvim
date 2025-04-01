@@ -22,6 +22,7 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
+    'theHamsta/nvim-dap-virtual-text',
     'leoluz/nvim-dap-go',
   },
   keys = {
@@ -130,5 +131,6 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+    require('nvim-dap-virtual-text').setup()
   end,
 }
