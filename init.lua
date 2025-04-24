@@ -202,7 +202,10 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- My stange and custom keypindings
 vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
-
+vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]ests [F]unction' })
+vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]ests fi[L]' })
+vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 

@@ -69,6 +69,20 @@ return {
       end,
       desc = 'Debug: Set Breakpoint',
     },
+    {
+      '<leader>gdt',
+      function()
+        require('dap-go').debug_test()
+      end,
+      desc = 'Debug: Set Breakpoint',
+    },
+    {
+      '<leader>gdlt',
+      function()
+        require('dap-go').debug_last_test()
+      end,
+      desc = 'Debug: Set Breakpoint',
+    },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
       '<F7>',
