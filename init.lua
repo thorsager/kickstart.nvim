@@ -220,10 +220,10 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- My stange and custom keypindings
 vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
-vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]ests [F]unction' })
-vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]ests fi[L]' })
-vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
-vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+-- vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]ests [F]unction' })
+-- vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]ests fi[L]' })
+-- vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
+-- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -692,6 +692,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        go = { 'gofmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -721,12 +722,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -858,7 +859,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     config = function()
-      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go' }
       require('nvim-treesitter').install(filetypes)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
