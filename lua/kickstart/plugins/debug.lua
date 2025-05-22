@@ -28,28 +28,28 @@ return {
   keys = {
     -- Basic debugging keymaps, feel free to change to your liking!
     {
-      '<leader>gdc',
+      '<leader>dc',
       function()
         require('dap').continue()
       end,
       desc = 'Debug: Start/Continue',
     },
     {
-      '<leader>gdi',
+      '<leader>di',
       function()
         require('dap').step_into()
       end,
       desc = 'Debug: Step Into',
     },
     {
-      '<leader>gdo',
+      '<leader>do',
       function()
         require('dap').step_over()
       end,
       desc = 'Debug: Step Over',
     },
     {
-      '<leader>gdu',
+      '<leader>du',
       function()
         require('dap').step_out()
       end,
@@ -70,18 +70,18 @@ return {
       desc = 'Debug: Set Breakpoint',
     },
     {
-      '<leader>gdt',
+      '<leader>dgt',
       function()
         require('dap-go').debug_test()
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Go Debug: Test',
     },
     {
-      '<leader>gdlt',
+      '<leader>dgl',
       function()
         require('dap-go').debug_last_test()
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Go Debug: Last test',
     },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     {
