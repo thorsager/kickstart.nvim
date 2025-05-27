@@ -206,8 +206,8 @@ vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T
 vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]est fi[L]e' })
 vim.keymap.set('n', '<leader>gis', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mport[s]' })
 vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
-vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
-vim.keymap.set('n', '<leader>ng', '<cmd>:Neogit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
+vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
+vim.keymap.set('n', '<leader>ng', '<cmd>:Neogit<CR>', { desc = '[N]eo[G]it' })
 -- vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
 -- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- [[ Basic Autocommands ]]
