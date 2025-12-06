@@ -56,6 +56,13 @@ return {
       desc = 'Debug: Step Out',
     },
     {
+      '<leader>dt',
+      function()
+        require('dap').close()
+      end,
+      desc = 'Debug: Treminate',
+    },
+    {
       '<leader>b',
       function() require('dap').toggle_breakpoint() end,
       desc = 'Debug: Toggle Breakpoint',
