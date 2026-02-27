@@ -628,7 +628,7 @@ require('lazy').setup({
       -- You can press `g?` for help in this menu.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'lua_ls', -- Lua Language server
+        'lua-language-server', -- Lua Language server
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
       })
@@ -663,7 +663,11 @@ require('lazy').setup({
           })
         end,
         settings = {
-          Lua = {},
+          Lua = {
+            completion = {
+              callSnippet = 'Replace',
+            },
+          },
         },
       })
       vim.lsp.enable 'lua_ls'
@@ -869,10 +873,19 @@ require('lazy').setup({
     config = function()
       local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'go' }
       require('nvim-treesitter').install(filetypes)
+
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = filetypes,
-        callback = function() vim.treesitter.start() end,
+        pattern = { '*' },
+        callback = function(args)
+          local lang = vim.treesitter.language.get_lang(args.match)
+          if lang and vim.treesitter.language.add(lang) then vim.treesitter.start(args.buf) end
+        end,
       })
+
+      -- vim.api.nvim_create_autocmd('FileType', {
+      --   pattern = filetypes,
+      --   callback = function() vim.treesitter.start() end,
+      -- })
     end,
   },
   {
@@ -899,9 +912,7 @@ require('lazy').setup({
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter',
     },
-    config = function()
-      require('go').setup()
-    end,
+    config = function() require('go').setup() end,
     event = { 'CmdlineEnter' },
     ft = { 'go', 'gomod' },
     build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
