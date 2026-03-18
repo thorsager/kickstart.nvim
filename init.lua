@@ -219,24 +219,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 -- My stange and custom keypindings
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'go',
-  callback = function(_)
-    vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]est [F]unction' })
-    vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]est fi[L]e' })
-    vim.keymap.set('n', '<leader>gis', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mport[s]' })
-  end,
-})
-vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
-vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
-vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
-vim.keymap.set('n', '<leader>ng', '<cmd>:Neogit<CR>', { desc = '[N]eo[G]it' })
-vim.keymap.set('n', '<leader>cfr', '<cmd>let @*=expand("%")<CR>', { desc = '[C]opy [F]ile [R]elative path' })
-vim.keymap.set('n', '<leader>cfp', '<cmd>let @*=expand("%:p")<CR>', { desc = '[C]opy [F]ile absolute [P]ath' })
-vim.keymap.set('n', '<leader>cfn', '<cmd>let @*=expand("%:t")<CR>', { desc = '[C]opy [F]ile [N]ame' })
-vim.keymap.set('n', '<leader>cfg', '<cmd>.GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
--- vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
--- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+require 'custom.keymaps'
+require 'custom.commands'
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -697,7 +682,11 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {
+          c = true,
+          cpp = true,
+          java = true,
+        }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else

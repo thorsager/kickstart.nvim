@@ -1,0 +1,26 @@
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'go',
+  callback = function(_)
+    vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]est [F]unction' })
+    vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]est fi[L]e' })
+    vim.keymap.set('n', '<leader>gis', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mport[s]' })
+  end,
+})
+vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
+vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
+vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
+vim.keymap.set('n', '<leader>ng', '<cmd>:Neogit<CR>', { desc = '[N]eo[G]it' })
+vim.keymap.set('n', '<leader>cfr', '<cmd>let @*=expand("%")<CR>', { desc = '[C]opy [F]ile [R]elative path' })
+vim.keymap.set('n', '<leader>cfp', '<cmd>let @*=expand("%:p")<CR>', { desc = '[C]opy [F]ile absolute [P]ath' })
+vim.keymap.set('n', '<leader>cfn', '<cmd>let @*=expand("%:t")<CR>', { desc = '[C]opy [F]ile [N]ame' })
+vim.keymap.set('n', '<leader>cfg', '<cmd>.GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
+-- vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
+-- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+--
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'java',
+  callback = function(_) vim.keymap.set('n', '<leader>mt', '<cmd>:MavenTest<CR>', { desc = 'Run [M]aven [T]est function/class' }) end,
+})
+vim.keymap.set('n', '<leader>mc', '<cmd>:MavenClean<CR>', { desc = 'Run [M]aven [C]lean' })
+vim.keymap.set('n', '<leader>mva', '<cmd>:MavenVerifyAll<CR>', { desc = 'Run [M]aven [V]erify all' })
+vim.keymap.set('n', '<leader>mta', '<cmd>:MavenTestAll<CR>', { desc = 'Run [M]aven [T]test all' })
