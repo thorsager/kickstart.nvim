@@ -26,3 +26,37 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.keymap.set('n', '<leader>mc', '<cmd>:MavenClean<CR>', { desc = 'Run [M]aven [C]lean' })
 vim.keymap.set('n', '<leader>mva', '<cmd>:MavenVerifyAll<CR>', { desc = 'Run [M]aven [V]erify all' })
 vim.keymap.set('n', '<leader>mta', '<cmd>:MavenTestAll<CR>', { desc = 'Run [M]aven [T]test all' })
+
+-- Exit terminal mode and switch windows in one motion
+local esc = vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true)
+vim.keymap.set('t', '<C-h>', function()
+  vim.api.nvim_feedkeys(esc, 'n', false)
+  vim.schedule(function() require('nvim-tmux-navigation').NvimTmuxNavigateLeft() end)
+end, { noremap = true, desc = 'Move left from terminal' })
+vim.keymap.set('t', '<C-j>', function()
+  vim.api.nvim_feedkeys(esc, 'n', false)
+  vim.schedule(function() require('nvim-tmux-navigation').NvimTmuxNavigateDown() end)
+end, { noremap = true, desc = 'Move down from terminal' })
+vim.keymap.set('t', '<C-k>', function()
+  vim.api.nvim_feedkeys(esc, 'n', false)
+  vim.schedule(function() require('nvim-tmux-navigation').NvimTmuxNavigateUp() end)
+end, { noremap = true, desc = 'Move up from terminal' })
+vim.keymap.set('t', '<C-l>', function()
+  vim.api.nvim_feedkeys(esc, 'n', false)
+  vim.schedule(function() require('nvim-tmux-navigation').NvimTmuxNavigateRight() end)
+end, { noremap = true, desc = 'Move right from terminal' })
+
+-- allow <C-[hjkl]> navigation through tmux panes when in netwr
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'netrw',
+  callback = function(ev)
+    local nvim_tmux_nav = require 'nvim-tmux-navigation'
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', '<C-h>', nvim_tmux_nav.NvimTmuxNavigateLeft, opts)
+    vim.keymap.set('n', '<C-j>', nvim_tmux_nav.NvimTmuxNavigateDown, opts)
+    vim.keymap.set('n', '<C-k>', nvim_tmux_nav.NvimTmuxNavigateUp, opts)
+    vim.keymap.set('n', '<C-l>', nvim_tmux_nav.NvimTmuxNavigateRight, opts)
+    vim.keymap.set('n', '<C-\\>', nvim_tmux_nav.NvimTmuxNavigateLastActive, opts)
+    vim.keymap.set('n', '<C-Space>', nvim_tmux_nav.NvimTmuxNavigateNext, opts)
+  end,
+})
