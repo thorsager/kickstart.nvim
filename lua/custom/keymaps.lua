@@ -6,6 +6,7 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<leader>gis', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mport[s]' })
   end,
 })
+vim.keymap.set('n', '<leader>z', '<cmd>:ZenMode<CR>', { desc = 'Toggle [Z]enMode' })
 vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
 vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
 vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
@@ -14,9 +15,10 @@ vim.keymap.set('n', '<leader>cfr', '<cmd>let @*=expand("%")<CR>', { desc = '[C]o
 vim.keymap.set('n', '<leader>cfp', '<cmd>let @*=expand("%:p")<CR>', { desc = '[C]opy [F]ile absolute [P]ath' })
 vim.keymap.set('n', '<leader>cfn', '<cmd>let @*=expand("%:t")<CR>', { desc = '[C]opy [F]ile [N]ame' })
 vim.keymap.set('n', '<leader>cfg', '<cmd>.GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
+
 -- vim.keymap.set('n', '<leader>grn', '<cmd>:GoRun<CR>', { desc = '[G]o [R]u[N]' })
 -- vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
---
+
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'java',
   callback = function(_) vim.keymap.set('n', '<leader>mt', '<cmd>:MavenTest<CR>', { desc = 'Run [M]aven [T]est function/class' }) end,
