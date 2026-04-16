@@ -1,10 +1,11 @@
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'go',
   callback = function(_)
-    vim.keymap.set('n', '<leader>gt', '', { desc = '[G]o [T]est' })
+    vim.keymap.set('n', '<leader>g', '', { desc = '[G]o' })
+    vim.keymap.set('n', '<leader>gt', '', { desc = '[G]o [T]esting' })
     vim.keymap.set('n', '<leader>gtf', '<cmd>:GoTestFunc<CR>', { desc = 'Run [G]o [T]est [F]unction' })
     vim.keymap.set('n', '<leader>gtl', '<cmd>:GoTestFile<CR>', { desc = 'Run [G]o [T]est fi[L]e' })
-    vim.keymap.set('n', '<leader>gis', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mport[s]' })
+    vim.keymap.set('n', '<leader>gi', '<cmd>:GoImports<CR>', { desc = 'Run [G]o [i]mports' })
   end,
 })
 vim.keymap.set('n', '<leader>z', '<cmd>:ZenMode<CR>', { desc = 'Toggle [Z]enMode' })
