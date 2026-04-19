@@ -29,13 +29,13 @@ return {
       vim.keymap.set('n', '<leader>cfn', '<cmd>let @*=expand("%:t")<CR>', { desc = '[C]opy [F]ile [N]ame' })
       vim.keymap.set('n', '<leader>cfg', '<cmd>.GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
 
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'java',
-        callback = function(_) vim.keymap.set('n', '<leader>mt', '<cmd>:MavenTest<CR>', { desc = 'Run [M]aven [T]est function/class' }) end,
-      })
-      vim.keymap.set('n', '<leader>mc', '<cmd>:MavenClean<CR>', { desc = 'Run [M]aven [C]lean' })
-      vim.keymap.set('n', '<leader>mva', '<cmd>:MavenVerifyAll<CR>', { desc = 'Run [M]aven [V]erify all' })
-      vim.keymap.set('n', '<leader>mta', '<cmd>:MavenTestAll<CR>', { desc = 'Run [M]aven [T]test all' })
+      -- vim.api.nvim_create_autocmd('FileType', {
+      --   pattern = 'java',
+      --   callback = function(_) vim.keymap.set('n', '<leader>mt', '<cmd>:MavenTest<CR>', { desc = 'Run [M]aven [T]est function/class' }) end,
+      -- })
+      -- vim.keymap.set('n', '<leader>mc', '<cmd>:MavenClean<CR>', { desc = 'Run [M]aven [C]lean' })
+      -- vim.keymap.set('n', '<leader>mva', '<cmd>:MavenVerifyAll<CR>', { desc = 'Run [M]aven [V]erify all' })
+      -- vim.keymap.set('n', '<leader>mta', '<cmd>:MavenTestAll<CR>', { desc = 'Run [M]aven [T]test all' })
 
       -- Exit terminal mode and switch windows in one motion
       local esc = vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true)
@@ -55,6 +55,15 @@ return {
         vim.api.nvim_feedkeys(esc, 'n', false)
         vim.schedule(function() require('nvim-tmux-navigation').NvimTmuxNavigateRight() end)
       end, { noremap = true, desc = 'Move right from terminal' })
+
+
+      vim.keymap.set( 'n','<leader>dc',function() require('dap').continue() end, { desc='[D]ebug [C]ontinue/Start'})
+      vim.keymap.set( 'n','<leader>di',function() require('dap').step_into() end, { desc='[D]ebug Step [I]nto'})
+      vim.keymap.set( 'n','<leader>do',function() require('dap').step_over() end, { desc='[D]ebug Step [O]ver'})
+      vim.keymap.set( 'n','<leader>du',function() require('dap').step_out() end, { desc='[D]ebug Step o[U]t'})
+      vim.keymap.set( 'n','<leader>dt',function() require('dap').close() end, { desc='[D]ebug [T]erminate/Close'})
+      vim.keymap.set( 'n','<leader>dgt',function() require('dap-go').debug_test() end, { desc='[D]ebug [G]o [T]est'})
+      vim.keymap.set( 'n','<leader>dgl',function() require('dap-go').debug_last_test() end, { desc='[D]ebug [G]o [L]ast test'})
 
       -- allow <C-[hjkl]> navigation through tmux panes when in netrw
       vim.api.nvim_create_autocmd('FileType', {
