@@ -1,0 +1,19 @@
+vim.pack.add {
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/zbirenbaum/copilot.lua',
+  'https://github.com/CopilotC-Nvim/CopilotChat.nvim',
+}
+
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(ev)
+    if ev.data.spec.name == 'CopilotChat.nvim' and (ev.data.kind == 'install' or ev.data.kind == 'update') then
+      if vim.fn.has 'win32' ~= 1 and vim.fn.executable 'make' == 1 then
+        vim.system({ 'make', 'tiktoken' }, { cwd = ev.data.path }):wait()
+      end
+    end
+  end,
+})
+
+require('CopilotChat').setup {
+  model = 'claude-sonnet-4.6',
+}
