@@ -131,3 +131,8 @@ vim.api.nvim_create_autocmd('FileType', {
     end, { desc = 'S[p]ell English & Danish' })
   end,
 })
+
+
+vim.api.nvim_create_user_command('PackUpdate', function()
+  vim.pack.update()
+end, {})
