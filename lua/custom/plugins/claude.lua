@@ -19,6 +19,6 @@ vim.keymap.set('n', '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', { desc = 'Deny 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'NvimTree', 'neo-tree', 'oil', 'minifiles', 'netrw' },
   callback = function()
-    vim.keymap.set('n', '<leader>ss', '<cmd>ClaudeCodeTreeAdd<cr>', { desc = 'Add file' })
+    vim.keymap.set('n', '<leader>as', '<cmd>ClaudeCodeTreeAdd<cr>', { desc = 'Add file (Send to Claude)' })
   end,
 })
