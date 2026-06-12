@@ -734,8 +734,8 @@ do
   local servers = {
     clangd = {},
     gopls = {},
-    -- pyright = {},
-    -- tsc = {},
+    pyright = {},
+    rust_analyzer = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
