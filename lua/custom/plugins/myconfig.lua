@@ -1,6 +1,7 @@
 local spell_checked_types = { 'text', 'plaintext', 'markdown' }
 
 -- misc
+vim.g.netrw_bufsettings = 'noma nomod nu rnu nobl nowrap ro'
 vim.api.nvim_set_option_value('colorcolumn', '79,120', {})
 vim.api.nvim_set_option_value('relativenumber', true, {})
 vim.opt.list = true
