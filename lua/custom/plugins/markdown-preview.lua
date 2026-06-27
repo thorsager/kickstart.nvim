@@ -10,6 +10,7 @@ require("markdown_preview").setup({
   open_browser = true,
   default_theme = "dark",      -- "dark" or "light"; initial preview theme
   debounce_ms = 300,
+  mermaid_renderer = "js"
 })
 
 vim.keymap.set("n", "<leader>mps", "<cmd>MarkdownPreview<cr>", { desc = "Markdown: Start preview" })
