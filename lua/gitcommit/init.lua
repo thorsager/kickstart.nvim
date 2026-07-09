@@ -26,15 +26,20 @@ function M.setup(user_opts)
   vim.api.nvim_create_autocmd('FileType', {
     pattern = 'gitcommit',
     callback = function(ev)
-      vim.keymap.set('n', opts.keymap, function()
-        M.generate(ev.buf)
-      end, { buffer = ev.buf, desc = 'Generate commit message' })
+      if opts.keymaps then
+        for _, entry in ipairs(opts.keymaps) do
+          vim.keymap.set('n', entry.key, function()
+            M.generate(ev.buf, entry)
+          end, { buffer = ev.buf, desc = entry.desc or 'Generate commit message' })
+        end
+      end
     end,
   })
 end
 
-function M.generate(bufnr)
-  local diff = vim.fn.systemlist(table.concat(opts.diff_command, ' '))
+function M.generate(bufnr, entry_opts)
+  local cfg = entry_opts or opts
+  local diff = vim.fn.systemlist(table.concat(cfg.diff_command, ' '))
   if vim.v.shell_error ~= 0 and #diff == 0 then
     vim.notify('Failed to get git diff', vim.log.levels.ERROR)
     return
@@ -43,11 +48,11 @@ function M.generate(bufnr)
     diff = { '(no staged changes)' }
   end
 
-  if opts.preview then
-    local state = ui.open(bufnr, diff, opts)
-    command.run(diff, opts, state)
+  if cfg.preview then
+    local state = ui.open(bufnr, diff, cfg)
+    command.run(diff, cfg, state)
   else
-    command.run_direct(diff, opts, vim.api.nvim_get_current_win(), bufnr)
+    command.run_direct(diff, cfg, vim.api.nvim_get_current_win(), bufnr)
   end
 end
 

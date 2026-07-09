@@ -28,10 +28,21 @@ M.defaults = {
   build_command = nil,
   diff_command = { 'git', 'diff', '--cached' },
   fold_diff = true,
+  keymaps = nil,
 }
 
-function M.merge(opts)
-  return vim.tbl_deep_extend('force', M.defaults, opts or {})
+function M.merge(user_opts)
+  user_opts = user_opts or {}
+  local keymaps = user_opts.keymaps
+  if not keymaps and user_opts.keymap then keymaps = { { key = user_opts.keymap } } end
+  local merged = vim.tbl_deep_extend('force', M.defaults, user_opts)
+  if keymaps then
+    merged.keymaps = {}
+    for _, entry in ipairs(keymaps) do
+      table.insert(merged.keymaps, vim.tbl_deep_extend('force', merged, entry))
+    end
+  end
+  return merged
 end
 
 return M
