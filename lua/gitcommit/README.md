@@ -77,6 +77,11 @@ require('gitcommit').setup({
   -- AI CLI binary name
   binary = 'pi',
 
+  -- Model passed to the binary via `--model <model>`.
+  -- When unset (nil), the `--model` argument is not added and the
+  -- binary uses its own default model.
+  model = nil,
+
   -- Arguments passed to the binary (before the system prompt and prompt)
   binary_args = {
     '--no-session',

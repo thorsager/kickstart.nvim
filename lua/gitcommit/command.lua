@@ -6,6 +6,9 @@ function M.build(config)
   end
   local cmd = { config.binary }
   vim.list_extend(cmd, config.binary_args)
+  if config.model then
+    vim.list_extend(cmd, { '--model', config.model })
+  end
   vim.list_extend(cmd, { '--system-prompt', config.system_prompt, '-p', config.prompt })
   return cmd
 end
@@ -23,6 +26,8 @@ function M.clean_output(lines)
     end
   end
   if #cleaned == 0 then cleaned = lines end
+  while #cleaned > 0 and cleaned[1] == '' do table.remove(cleaned, 1) end
+  while #cleaned > 0 and cleaned[#cleaned] == '' do table.remove(cleaned, #cleaned) end
   return cleaned
 end
 
@@ -101,8 +106,6 @@ function M.run_direct(diff, config, orig_win, orig_buf)
         return
       end
       local cleaned = M.clean_output(collected)
-      while #cleaned > 0 and cleaned[1] == '' do table.remove(cleaned, 1) end
-      while #cleaned > 0 and cleaned[#cleaned] == '' do table.remove(cleaned, #cleaned) end
       if #cleaned == 0 then return end
       if vim.api.nvim_win_is_valid(orig_win) and vim.api.nvim_buf_is_valid(orig_buf) then
         vim.api.nvim_set_current_win(orig_win)

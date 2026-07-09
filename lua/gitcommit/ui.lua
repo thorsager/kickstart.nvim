@@ -35,6 +35,13 @@ function M.open(orig_buf, diff, opts)
   local row = math.floor((vim.o.lines - height) / 2)
   local col = math.floor((vim.o.columns - width) / 2)
 
+  local prompt_line = '(' .. opts.prompt .. ')'
+  local placeholder = {}
+  if opts.model then
+    table.insert(placeholder, '[model: ' .. opts.model .. ']')
+  end
+  table.insert(placeholder, prompt_line)
+
   function state:stop_spinner()
     if self.spinner_timer then
       pcall(function()
@@ -82,7 +89,7 @@ function M.open(orig_buf, diff, opts)
     if not vim.api.nvim_buf_is_valid(self.out_buf) then return end
     local existing = vim.api.nvim_buf_get_lines(self.out_buf, 0, -1, false)
     for _, l in ipairs(existing) do
-      if l == '(' .. opts.prompt .. ')' then
+      if l == prompt_line then
         vim.api.nvim_buf_set_lines(self.out_buf, 0, -1, false, {})
         break
       end
@@ -166,7 +173,7 @@ function M.open(orig_buf, diff, opts)
   end
 
   state.out_buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(state.out_buf, 0, -1, false, { '(' .. opts.prompt .. ')' })
+  vim.api.nvim_buf_set_lines(state.out_buf, 0, -1, false, placeholder)
   vim.api.nvim_set_option_value('filetype', 'gitcommit', { buf = state.out_buf })
   vim.api.nvim_set_option_value('buftype', 'nofile', { buf = state.out_buf })
 
@@ -177,7 +184,7 @@ function M.open(orig_buf, diff, opts)
   state.out_win = vim.api.nvim_open_win(state.out_buf, not opts.show_diff, {
     relative = 'editor',
     width = width,
-    height = 1,
+    height = math.min(#placeholder, out_height),
     row = out_row,
     col = col,
     border = opts.border,

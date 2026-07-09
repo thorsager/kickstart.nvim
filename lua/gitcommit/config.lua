@@ -8,6 +8,7 @@ M.defaults = {
   height_ratio = 0.80,
   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
   binary = 'pi',
+  model = nil,
   binary_args = {
     '--no-session',
     '--no-tools',
