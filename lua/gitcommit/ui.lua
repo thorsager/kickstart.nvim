@@ -82,7 +82,7 @@ function M.open(orig_buf, diff, opts)
     if not vim.api.nvim_buf_is_valid(self.out_buf) then return end
     local existing = vim.api.nvim_buf_get_lines(self.out_buf, 0, -1, false)
     for _, l in ipairs(existing) do
-      if l:match '%(generating' then
+      if l == '(' .. opts.prompt .. ')' then
         vim.api.nvim_buf_set_lines(self.out_buf, 0, -1, false, {})
         break
       end
@@ -165,7 +165,7 @@ function M.open(orig_buf, diff, opts)
   end
 
   state.out_buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_lines(state.out_buf, 0, -1, false, { '(generating commit message...)' })
+  vim.api.nvim_buf_set_lines(state.out_buf, 0, -1, false, { '(' .. opts.prompt .. ')' })
   vim.api.nvim_set_option_value('filetype', 'gitcommit', { buf = state.out_buf })
   vim.api.nvim_set_option_value('buftype', 'nofile', { buf = state.out_buf })
 

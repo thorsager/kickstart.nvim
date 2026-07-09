@@ -113,6 +113,59 @@ require('gitcommit').setup({
 
   -- Fold diff hunks in the diff pane (each hunk collapses to its @@ header line)
   fold_diff = true,
+
+  -- Multiple keybindings, each with its own overrides.
+  -- When set, takes precedence over the single `keymap` option.
+  -- Each entry merges with the defaults above; only `key` is required.
+  -- Optional: `desc` sets the keymap description.
+  -- keymaps = {
+  --   {
+  --     key = '<leader>xc',
+  --     prompt = 'Write a conventional commit message for this diff.',
+  --   },
+  --   {
+  --     key = '<leader>xv',
+  --     desc = 'Generate verbose commit',
+  --     system_prompt = 'Write a detailed commit message with a thorough body...',
+  --     preview = false,
+  --   },
+  --   {
+  --     key = '<leader>xa',
+  --     build_command = function(config)
+  --       return { 'aichat', '--system', config.system_prompt, config.prompt }
+  --     end,
+  --   },
+  -- },
+  keymaps = nil,
+})
+```
+
+## Multiple Keybindings
+
+You can define multiple keybindings, each with different prompts, commands, or
+preview settings. Each entry inherits the defaults and overrides only what you
+specify:
+
+```lua
+require('gitcommit').setup({
+  keymaps = {
+    {
+      key = '<leader>xc',
+      prompt = 'Write a concise commit message.',
+    },
+    {
+      key = '<leader>xv',
+      desc = 'Verbose commit',
+      system_prompt = 'Write a detailed commit message with a thorough body...',
+    },
+    {
+      key = '<leader>xa',
+      preview = false,
+      build_command = function(config)
+        return { 'aichat', '--system', config.system_prompt, config.prompt }
+      end,
+    },
+  },
 })
 ```
 
