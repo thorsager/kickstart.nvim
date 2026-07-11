@@ -1,6 +1,6 @@
 require('gitcommit').setup({
   keymaps = {
-    {key = '<leader>xc', fold_diff = true, model='corti/corti-s1-mini'},
+    {key = '<leader>xc', fold_diff = true, model='corti/corti-s1-mini-instant'},
     {
       key = '<leader>xv',
       fold_diff = true,
