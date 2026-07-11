@@ -82,6 +82,14 @@ require('gitcommit').setup({
   -- binary uses its own default model.
   model = nil,
 
+  -- Allow the AI binary to load extensions. Defaults to false so that
+  -- the commit-message generation is deterministic and unaffected by
+  -- installed extensions. Set to true if you need an extension to be
+  -- available. For example, the `pi-opencode-bridge` extension provides
+  -- access to custom providers/models, so `extensions` must be `true`
+  -- for it to work.
+  extensions = false,
+
   -- Arguments passed to the binary (before the system prompt and prompt)
   binary_args = {
     '--no-session',
@@ -89,7 +97,6 @@ require('gitcommit').setup({
     '--no-context-files',
     '--no-skills',
     '--no-prompt-templates',
-    '--no-extensions',
   },
 
   -- System prompt sent to the AI agent
@@ -173,6 +180,19 @@ require('gitcommit').setup({
   },
 })
 ```
+
+## Enabling Extensions for Custom Providers
+
+If you use an extension such as `pi-opencode-bridge` to access custom providers or models, you must allow the binary to load extensions:
+
+```lua
+require('gitcommit').setup({
+  model = 'oc-sdk-zen/big-pickle',
+  extensions = true,
+})
+```
+
+Without `extensions = true`, the plugin passes `--no-extensions` and the custom provider will not be available, resulting in a "model not found" error.
 
 ## Custom Command Example
 
