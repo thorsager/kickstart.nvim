@@ -6,6 +6,9 @@ function M.build(config)
   end
   local cmd = { config.binary }
   vim.list_extend(cmd, config.binary_args)
+  if not config.extensions then
+    table.insert(cmd, '--no-extensions')
+  end
   if config.model then
     vim.list_extend(cmd, { '--model', config.model })
   end
@@ -31,8 +34,41 @@ function M.clean_output(lines)
   return cleaned
 end
 
+local function truncate_arg(arg, max_len)
+  if not arg or #arg <= max_len then return arg end
+  return arg:sub(1, max_len) .. '...'
+end
+
+local function truncate_prompt(arg)
+  if not arg or #arg <= 13 then return arg end
+  return arg:sub(1, 5) .. '...' .. arg:sub(-5)
+end
+
+local function shell_quote(arg)
+  if arg:match('^[%w%-%._/]+$') then return arg end
+  return "'" .. arg:gsub("'", "'\\''") .. "'"
+end
+
+local function display_cmd(cmd)
+  local parts = {}
+  local skip_next = false
+  for i, arg in ipairs(cmd) do
+    if skip_next then
+      skip_next = false
+    elseif arg == '--system-prompt' or arg == '-p' then
+      table.insert(parts, arg)
+      table.insert(parts, shell_quote(truncate_prompt(cmd[i + 1] or '')))
+      skip_next = true
+    else
+      table.insert(parts, shell_quote(truncate_arg(arg, 80)))
+    end
+  end
+  return table.concat(parts, ' ')
+end
+
 function M.run(diff, config, state)
   local cmd = M.build(config)
+  local stderr_data = ''
   return vim.system(cmd, {
     stdin = table.concat(diff, '\n'),
     stdout = function(err, data)
@@ -43,6 +79,7 @@ function M.run(diff, config, state)
     end,
     stderr = function(err, data)
       if not data then return end
+      stderr_data = stderr_data .. data
       vim.schedule(function()
         if vim.api.nvim_buf_is_valid(state.out_buf) then
           vim.notify(config.binary .. ' stderr: ' .. data, vim.log.levels.WARN)
@@ -51,12 +88,19 @@ function M.run(diff, config, state)
     end,
   }, function(obj)
     vim.schedule(function()
-      state:stop_spinner()
       if state.closed then return end
       if obj.code ~= 0 then
+        local full_cmd = display_cmd(cmd)
+        local msg = config.binary .. ' exited with code ' .. obj.code
+          .. '\n\ncommand:\n' .. full_cmd
+        if stderr_data ~= '' then
+          msg = msg .. '\n\nstderr:\n' .. stderr_data
+        end
+        state:show_error(msg)
         vim.notify(config.binary .. ' exited with code ' .. obj.code, vim.log.levels.ERROR)
         return
       end
+      state:stop_spinner()
       if not vim.api.nvim_buf_is_valid(state.out_buf) then return end
       local lines = vim.api.nvim_buf_get_lines(state.out_buf, 0, -1, false)
       local cleaned = M.clean_output(lines)
@@ -68,6 +112,7 @@ end
 function M.run_direct(diff, config, orig_win, orig_buf)
   local cmd = M.build(config)
   local collected = {}
+  local stderr_data = ''
   local spinner_idx = 1
   local spinner_frames = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
   local spinner_msg_id = nil
@@ -92,6 +137,7 @@ function M.run_direct(diff, config, orig_win, orig_buf)
     end,
     stderr = function(err, data)
       if not data then return end
+      stderr_data = stderr_data .. data
       vim.schedule(function()
         vim.notify(config.binary .. ' stderr: ' .. data, vim.log.levels.WARN)
       end)
@@ -102,7 +148,13 @@ function M.run_direct(diff, config, orig_win, orig_buf)
       spinner_timer:close()
       vim.notify('', nil, { replace = spinner_msg_id })
       if obj.code ~= 0 then
-        vim.notify(config.binary .. ' exited with code ' .. obj.code, vim.log.levels.ERROR)
+        local full_cmd = display_cmd(cmd)
+        local msg = config.binary .. ' exited with code ' .. obj.code
+          .. '\n\ncommand:\n' .. full_cmd
+        if stderr_data ~= '' then
+          msg = msg .. '\n\nstderr:\n' .. stderr_data
+        end
+        vim.notify(msg, vim.log.levels.ERROR)
         return
       end
       local cleaned = M.clean_output(collected)

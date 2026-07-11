@@ -20,6 +20,7 @@ function M.open(orig_buf, diff, opts)
     orig_buf = orig_buf,
     orig_win = orig_win,
     closed = false,
+    error = false,
     spinner_timer = nil,
     diff_win = nil,
     diff_buf = nil,
@@ -73,7 +74,30 @@ function M.open(orig_buf, diff, opts)
     vim.cmd('redraw!')
   end
 
+  function state:show_error(message)
+    self.error = true
+    self:stop_spinner()
+    if self.closed or not vim.api.nvim_buf_is_valid(self.out_buf) then return end
+    local lines = { 'ERROR: failed to generate commit message', '' }
+    for _, line in ipairs(vim.split(message, '\n')) do
+      table.insert(lines, line)
+    end
+    table.insert(lines, '')
+    table.insert(lines, 'Press q or Esc to close.')
+    vim.api.nvim_set_option_value('modifiable', true, { buf = self.out_buf })
+    vim.api.nvim_buf_set_lines(self.out_buf, 0, -1, false, lines)
+    vim.api.nvim_set_option_value('modifiable', false, { buf = self.out_buf })
+    self:resize_output()
+    if vim.api.nvim_win_is_valid(self.out_win) then
+      pcall(vim.api.nvim_win_set_config, self.out_win, { title = ' Error ', title_pos = 'center' })
+    end
+  end
+
   function state:insert_commit()
+    if self.error then
+      vim.notify('Cannot insert commit message: generation failed', vim.log.levels.ERROR)
+      return
+    end
     local lines = vim.api.nvim_buf_get_lines(self.out_buf, 0, -1, false)
     while #lines > 0 and lines[1] == '' do table.remove(lines, 1) end
     while #lines > 0 and lines[#lines] == '' do table.remove(lines, #lines) end

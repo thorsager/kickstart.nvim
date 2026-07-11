@@ -9,13 +9,13 @@ M.defaults = {
   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
   binary = 'pi',
   model = nil,
+  extensions = false,
   binary_args = {
     '--no-session',
     '--no-tools',
     '--no-context-files',
     '--no-skills',
     '--no-prompt-templates',
-    '--no-extensions',
   },
   system_prompt = 'You are a commit message generator. '
     .. 'Given a staged git diff, output a commit message following the '
