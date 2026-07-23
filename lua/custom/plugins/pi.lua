@@ -1,0 +1,21 @@
+-- vim.pack.add {
+--   'https://github.com/pablopunk/pi.nvim'
+-- }
+--
+-- require('pi').setup({
+--   thinking = 'low',
+--   context = {
+--     max_bytes = 24000,
+--     ask = {
+--       surrounding_lines = 80,
+--     },
+--     selection = {
+--       surrounding_lines = 40,
+--     },
+--     diagnostics = {
+--       enabled = true,
+--     },
+--   },
+--   skills = true,
+--   extensions = true,
+-- })
