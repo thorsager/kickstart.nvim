@@ -45,12 +45,12 @@ vim.keymap.set('n', '<leader>z', '<cmd>:ZenMode<CR>', { desc = 'Toggle [Z]enMode
 vim.keymap.set('n', '<leader>rw', '<cmd>:Ex<CR>', { desc = 'Open Net[RW]' })
 vim.keymap.set('n', '<leader>ng', '<cmd>:Neogit<CR>', { desc = '[N]eo[G]it' })
 
-vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
-vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
+-- vim.keymap.set('n', '<leader>cpc', '<cmd>:CopilotChat<CR>', { desc = '[C]o[P]ilot[C]hat' })
+-- vim.keymap.set('n', '<leader>cpm', '<cmd>:CopilotChatCommit<CR>', { desc = '[C]o[P]ilotChat co[M]mit' })
 vim.keymap.set('n', '<leader>cfr', '<cmd>let @*=expand("%")<CR>', { desc = '[C]opy [F]ile [R]elative path' })
 vim.keymap.set('n', '<leader>cfp', '<cmd>let @*=expand("%:p")<CR>', { desc = '[C]opy [F]ile absolute [P]ath' })
 vim.keymap.set('n', '<leader>cfn', '<cmd>let @*=expand("%:t")<CR>', { desc = '[C]opy [F]ile [N]ame' })
-vim.keymap.set('n', '<leader>cfvi .gvi .', '<cmd>.GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
+vim.keymap.set('n', '<leader>cfg', '<cmd>:GBrowse!<CR>', { desc = '[C]opy [F]ile:line [G]itHub URL' })
 
 -- Exit terminal mode and switch windows in one motion
 local esc = vim.api.nvim_replace_termcodes('<C-\\><C-n>', true, true, true)
