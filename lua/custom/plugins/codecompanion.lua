@@ -1,0 +1,90 @@
+-- vim.pack.add({ "https://www.github.com/nvim-lua/plenary.nvim" })
+-- vim.pack.add({ "https://github.com/nvim-treesitter/nvim-treesitter" })
+-- vim.pack.add({ {
+--   src = "https://www.github.com/olimorris/codecompanion.nvim",
+--   version = vim.version.range("^19.0.0")
+-- } })
+--
+-- -- Somewhere in your config
+-- require("codecompanion").setup({
+--   adapters = {
+--     acp = {
+--       opencode = function()
+--         return require("codecompanion.adapters").extend("opencode")
+--       end,
+--     },
+--     http = {
+--       corti = function()
+--         return require("codecompanion.adapters").extend("openai_compatible", {
+--           env = {
+--             api_key = "CORTI_BEARER",
+--             url = "https://ai.eu.corti.app",
+--             chat_url = "/v1/chat/completions",
+--             models_endpoint = "/v1/models",
+--           },
+--           schema = {
+--             model = {
+--               default = "corti-s1",
+--               choices = {
+--                 ["corti-s1"] = { opts = { can_reason = true } },
+--                 ["corti-s1-mini"] = { opts = { can_reason = true } },
+--                 ["corti-s1-instant"] = { opts = { can_reason = true } },
+--                 ["corti-s1-mini-instant"] = { opts = { can_reason = true } },
+--               },
+--             },
+--           },
+--         })
+--       end,
+--     },
+--   },
+--   rules = {
+--     opts = {
+--       chat = {
+--         enabled = false,
+--       },
+--     },
+--   },
+--   interactions = {
+--     cli = {
+--       agent = "claude_code",
+--       agents = {
+--         claude_code = {
+--           cmd = "claude",
+--           args = {},
+--           description = "Claude Code CLI",
+--           provider = "terminal",
+--         },
+--         opencode = {
+--           cmd = "opencode",
+--           args = { "acp" },
+--           description = "OpenCode CLI",
+--           provider = "terminal",
+--         },
+--       },
+--     },
+--     chat = {
+--       adapter = {
+--         name = "corti",
+--         model = "corti-s1-mini-instant"
+--       },
+--       roles = {
+--         user = "mth",
+--       },
+--       opts = {
+--         system_prompt = function(ctx)
+--           return "You are a helpful assistant."
+--         end,
+--       },
+--       tools = {
+--         groups = {},
+--         opts = {
+--           default_tools = {},
+--           system_prompt = {
+--             enabled = false,
+--           },
+--         },
+--       },
+--     },
+--   }
+-- })
+
