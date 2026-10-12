@@ -35,12 +35,12 @@ M.defaults = {
 function M.merge(user_opts)
   user_opts = user_opts or {}
   local keymaps = user_opts.keymaps
-  if not keymaps and user_opts.keymap then keymaps = { { key = user_opts.keymap } } end
+  if not keymaps and user_opts.keymap then keymaps = { default = { key = user_opts.keymap } } end
   local merged = vim.tbl_deep_extend('force', M.defaults, user_opts)
   if keymaps then
     merged.keymaps = {}
-    for _, entry in ipairs(keymaps) do
-      table.insert(merged.keymaps, vim.tbl_deep_extend('force', merged, entry))
+    for id, entry in pairs(keymaps) do
+      merged.keymaps[id] = vim.tbl_deep_extend('force', merged, entry)
     end
   end
   return merged

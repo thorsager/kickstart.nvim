@@ -3,7 +3,7 @@ local ui = require('gitcommit.ui')
 local command = require('gitcommit.command')
 
 local M = {}
-local opts = {}
+M.opts = {}
 
 local function setup_highlights()
   local groups = {
@@ -18,7 +18,7 @@ local function setup_highlights()
 end
 
 function M.setup(user_opts)
-  opts = config.merge(user_opts)
+  M.opts = config.merge(user_opts)
   setup_highlights()
   vim.api.nvim_create_autocmd('ColorScheme', {
     callback = setup_highlights,
@@ -26,8 +26,8 @@ function M.setup(user_opts)
   vim.api.nvim_create_autocmd('FileType', {
     pattern = 'gitcommit',
     callback = function(ev)
-      if opts.keymaps then
-        for _, entry in ipairs(opts.keymaps) do
+      if M.opts.keymaps then
+        for _, entry in pairs(M.opts.keymaps) do
           vim.keymap.set('n', entry.key, function()
             M.generate(ev.buf, entry)
           end, { buffer = ev.buf, desc = entry.desc or 'Generate commit message' })
@@ -37,8 +37,12 @@ function M.setup(user_opts)
   })
 end
 
+function M.reconfigure(user_opts)
+  M.opts = vim.tbl_deep_extend('force', M.opts, user_opts or {})
+end
+
 function M.generate(bufnr, entry_opts)
-  local cfg = entry_opts or opts
+  local cfg = entry_opts or M.opts
   local diff = vim.fn.systemlist(table.concat(cfg.diff_command, ' '))
   if vim.v.shell_error ~= 0 and #diff == 0 then
     vim.notify('Failed to get git diff', vim.log.levels.ERROR)
