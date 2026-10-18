@@ -15,6 +15,9 @@ vim.opt.listchars:append {
   nbsp = '☠',
 }
 
+vim.cmd.highlight({"Cursor","guibg=#00ff00"})
+vim.opt.guicursor:append "n-v-c:block-Cursor-blinkwait300-blinkon200-blinkoff150"
+
 -- open *.Containerfile, just like .Dockerfile
 vim.filetype.add {
   extension = {
