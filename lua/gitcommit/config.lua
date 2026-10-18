@@ -17,7 +17,9 @@ M.defaults = {
     '--no-skills',
     '--no-prompt-templates',
   },
-  system_prompt = 'You are a commit message generator. '
+  system_prompt = 'You are an expert software engineer and version control '
+    .. 'master. Your task is to write a git commit message based on the '
+    .. 'provided `git diff`. '
     .. 'Given a staged git diff, output a commit message following the '
     .. 'commitizen convention (e.g. "feat:", "fix:", "refactor:"). '
     .. 'The subject line must be under 50 characters. '
