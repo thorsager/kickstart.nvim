@@ -1036,5 +1036,27 @@ do
   require 'custom.plugins'
 end
 
+-- ============================================================
+-- SECTION 11: MY CONFIG
+-- Personal configuration moved from lua/custom/plugins/myconfig.lua
+-- ============================================================
+do
+  local ok, err = pcall(require, 'my')
+  if not ok and not err:match "module 'my' not found" then
+    vim.notify(('Failed to load my config:\n%s'):format(err), vim.log.levels.ERROR)
+  end
+end
+
+-- ============================================================
+-- SECTION 12: LOCAL CONFIG
+-- Load local overrides from `lua/local/init.lua` if it exists
+-- ============================================================
+do
+  local ok, err = pcall(require, 'local')
+  if not ok and not err:match "module 'local' not found" then
+    vim.notify(('Failed to load local config:\n%s'):format(err), vim.log.levels.ERROR)
+  end
+end
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

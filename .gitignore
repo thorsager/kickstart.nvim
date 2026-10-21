@@ -12,3 +12,6 @@ spell/
 nvim-pack-lock.json
 
 .DS_Store
+
+# Never commit local overrides; keep the folder itself trackable
+/lua/local/init.lua
