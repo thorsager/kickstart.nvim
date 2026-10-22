@@ -5,7 +5,18 @@ Generate commit messages from staged git diffs using an AI CLI agent.
 ## Requirements
 
 - Neovim 0.10+
-- An AI CLI binary that reads a prompt from stdin and writes the response to stdout (defaults to [`pi`](https://github.com/anthropics/pi))
+- An AI CLI binary that reads a prompt from stdin and writes the response to stdout
+
+Two engines are supported out of the box, selected via the `engine` option:
+
+- `pi` (default) — [pi](https://github.com/anthropics/pi)
+- `omp` — [omp](https://github.com/corti/omp)
+
+```lua
+require('gitcommit').setup({ engine = 'omp' })
+```
+
+Each engine bundles its own preset of `binary` and `binary_args` (the flags each binary needs to run non-interactively). Setting `binary`/`binary_args` directly in setup always overrides the preset.
 
 ## Installation
 
@@ -74,7 +85,12 @@ require('gitcommit').setup({
   -- Floating window border style (array of 8 strings: corners + sides)
   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
 
-  -- AI CLI binary name
+  -- AI engine: 'pi' (default) or 'omp'. Selects the preset binary and
+  -- flags for the CLI agent. Setting `binary` or `binary_args` below
+  -- explicitly overrides the preset.
+  engine = 'pi',
+
+  -- AI CLI binary name (defaults to the engine preset; overrides it when set)
   binary = 'pi',
 
   -- Model passed to the binary via `--model <model>`.
@@ -90,7 +106,10 @@ require('gitcommit').setup({
   -- for it to work.
   extensions = false,
 
-  -- Arguments passed to the binary (before the system prompt and prompt)
+  -- Arguments passed to the binary (before the system prompt and prompt).
+  -- Defaults to the engine preset (overrides it when set):
+  --   pi:  --no-session --no-tools --no-context-files --no-skills --no-prompt-templates
+  --   omp: --no-session --no-tools --no-lsp --no-rules --no-skills
   binary_args = {
     '--no-session',
     '--no-tools',

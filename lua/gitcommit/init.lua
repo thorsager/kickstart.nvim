@@ -4,6 +4,9 @@ local command = require('gitcommit.command')
 
 local M = {}
 M.opts = {}
+-- Raw (unresolved) setup options, kept so reconfigure() can re-resolve
+-- engine presets instead of inheriting a stale `binary`.
+local raw_setup_opts = nil
 
 local function setup_highlights()
   local groups = {
@@ -18,6 +21,7 @@ local function setup_highlights()
 end
 
 function M.setup(user_opts)
+  raw_setup_opts = user_opts
   M.opts = config.merge(user_opts)
   setup_highlights()
   vim.api.nvim_create_autocmd('ColorScheme', {
@@ -39,20 +43,10 @@ end
 
 function M.reconfigure(user_opts)
   user_opts = user_opts or {}
-  local keymaps = user_opts.keymaps
-  user_opts.keymaps = nil
-  M.opts = vim.tbl_deep_extend('force', M.opts, user_opts)
-  if keymaps then
-    M.opts.keymaps = M.opts.keymaps or {}
-    -- Template of top-level opts (defaults) used as the base for keymap entries
-    -- that don't already exist, mirroring the per-entry merge done in setup().
-    local template = vim.deepcopy(M.opts)
-    template.keymaps = nil
-    for id, entry in pairs(keymaps) do
-      local base = M.opts.keymaps[id] or template
-      M.opts.keymaps[id] = vim.tbl_deep_extend('force', base, entry)
-    end
-  end
+  -- Re-merge raw setup options + new options so a changed `engine` picks
+  -- up the matching binary/args preset instead of a stale resolved binary.
+  local merged_raw = vim.tbl_deep_extend('force', raw_setup_opts or {}, user_opts)
+  M.opts = config.merge(merged_raw)
 end
 
 function M.generate(bufnr, entry_opts)

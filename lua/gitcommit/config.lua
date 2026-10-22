@@ -1,22 +1,40 @@
 local M = {}
 
+-- Presets for supported AI CLI engines. `engine` selects the preset that
+-- provides `binary` and `binary_args`; setting those directly still wins.
+M.engines = {
+  pi = {
+    binary = 'pi',
+    binary_args = {
+      '--no-session',
+      '--no-tools',
+      '--no-context-files',
+      '--no-skills',
+      '--no-prompt-templates',
+    },
+  },
+  omp = {
+    binary = 'omp',
+    binary_args = {
+      '--no-session',
+      '--no-tools',
+      '--no-lsp',
+      '--no-rules',
+      '--no-skills',
+    },
+  },
+}
+
 M.defaults = {
+  engine = 'pi',
   keymap = '<leader>xc',
   show_diff = true,
   preview = true,
   width_ratio = 0.85,
   height_ratio = 0.80,
   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-  binary = 'pi',
   model = nil,
   extensions = false,
-  binary_args = {
-    '--no-session',
-    '--no-tools',
-    '--no-context-files',
-    '--no-skills',
-    '--no-prompt-templates',
-  },
   system_prompt = 'You are an expert software engineer and version control '
     .. 'master. Your task is to write a git commit message based on the '
     .. 'provided `git diff`. '
@@ -34,18 +52,42 @@ M.defaults = {
   keymaps = nil,
 }
 
+-- Fill in `binary` and `binary_args` from the engine preset when unset.
+-- Mutates and returns `opts`.
+function M.resolve(opts)
+  local preset = M.engines[opts.engine]
+  if not preset then
+    local fallback = M.defaults.engine
+    vim.notify(
+      'gitcommit: unknown engine ' .. vim.inspect(opts.engine)
+        .. ", falling back to '" .. fallback .. "'",
+      vim.log.levels.WARN
+    )
+    opts.engine = fallback
+    preset = M.engines[fallback]
+  end
+  if opts.binary == nil then opts.binary = preset.binary end
+  if opts.binary_args == nil then opts.binary_args = vim.deepcopy(preset.binary_args) end
+  return opts
+end
+
 function M.merge(user_opts)
   user_opts = user_opts or {}
   local keymaps = user_opts.keymaps
   if not keymaps and user_opts.keymap then keymaps = { default = { key = user_opts.keymap } } end
-  local merged = vim.tbl_deep_extend('force', M.defaults, user_opts)
+  local base = vim.tbl_deep_extend('force', M.defaults, user_opts)
+  -- Template of unresolved top-level opts used as the base for keymap
+  -- entries, so a per-entry `engine` can still select a different preset.
+  local template = vim.deepcopy(base)
+  template.keymaps = nil
+  local resolved = M.resolve(base)
   if keymaps then
-    merged.keymaps = {}
+    resolved.keymaps = {}
     for id, entry in pairs(keymaps) do
-      merged.keymaps[id] = vim.tbl_deep_extend('force', merged, entry)
+      resolved.keymaps[id] = M.resolve(vim.tbl_deep_extend('force', template, entry))
     end
   end
-  return merged
+  return resolved
 end
 
 return M
